@@ -12,10 +12,10 @@ st.markdown(
     " and projected cash flow intervals."
 )
 
-# Generic template / empty fallback data (no personal info/holdings pre-loaded)
+# Generic template / empty fallback data
 total_eai = 0.00
-labels = ["Holdings"]
-eai = [0.00]
+labels = []
+eai = []
 
 # Sidebar file uploader for new PDF statements
 st.sidebar.header("Statement Management")
@@ -59,15 +59,24 @@ st.markdown("---")
 # Unified Side-by-Side Visualizations
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-# Pie Chart Subplot
-ax1.pie(
-    eai if total_eai > 0 else [1],
-    labels=labels if total_eai > 0 else ["No Statement Loaded"],
-    autopct="%1.1f%%" if total_eai > 0 else None,
-    startangle=140,
-    colors=colors,
-    wedgeprops={"edgecolor": "white", "linewidth": 1.5},
-)
+# Pie Chart Subplot (Safely handled for zero values)
+if total_eai > 0 and len(eai) > 0:
+  ax1.pie(
+      eai,
+      labels=labels,
+      autopct="%1.1f%%",
+      startangle=140,
+      colors=colors[: len(eai)],
+      wedgeprops={"edgecolor": "white", "linewidth": 1.5},
+  )
+else:
+  ax1.pie(
+      [1],
+      labels=["No Statement Loaded"],
+      startangle=140,
+      colors=["#d3d3d3"],
+      wedgeprops={"edgecolor": "white", "linewidth": 1.5},
+  )
 ax1.set_title("EAI Breakdown by Asset", fontweight="bold")
 ax1.axis("equal")
 
@@ -147,7 +156,7 @@ st.pyplot(fig3)
 
 st.markdown("---")
 
-# Complete Interactive Holdings Data Grid (Clean/Empty template ready for PDF upload)
+# Complete Interactive Holdings Data Grid
 st.subheader(
     "📋 Complete Portfolio Holdings Overview (Scrollable Spreadsheet View)"
 )
@@ -169,6 +178,3 @@ st.caption(
     "Upload a statement via the sidebar to populate your holdings automatically,"
     " or use this view to inspect assets. Click any column header to sort."
 )
-
-# Repository metadata / GitHub association reference
-# Owner: matthannah1980-code
