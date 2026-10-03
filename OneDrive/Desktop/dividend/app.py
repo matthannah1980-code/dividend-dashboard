@@ -169,3 +169,6 @@ st.caption(
     "Upload a statement via the sidebar to populate your holdings automatically,"
     " or use this view to inspect assets. Click any column header to sort."
 )
+
+# Repository metadata / GitHub association reference
+# Owner: matthannah1980-code
